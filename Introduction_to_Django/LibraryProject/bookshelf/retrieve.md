@@ -1,11 +1,21 @@
-# Call retrieve function object.all() using a for loop to show details of the Book instance.
+# Use the .get method to get the instance of book created.
 
 ## Import Book class from model.py file in bookshelf app.
 >>> from bookkshelf.models import Book
 
-## Use for loop to get details of the Book instance.
->>> for i in Book.objects.all():
-        print(i.id, i.title, i.author, i.publication_year)
+## Use .get method to get book instance.
+>>> book = Book.objects.get(title=1984) 
 
+## Use print statement to get attribute values of the book instance.
+>>> print("ID", book.id) 
 ## Shell output
-2 1984 George Orwell 1949        
+ID: 2
+>>> print("Title:", book.title) 
+## Shell output
+Title: 1984
+>>> print("Author:", book.author)
+## Shell output
+Author: George Orwell
+>>> print("Publication Year:", book.publication_year)
+## Shell output
+Publication Year: 1949
