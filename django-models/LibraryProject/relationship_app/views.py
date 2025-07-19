@@ -1,7 +1,8 @@
 from django.views.generic.detail import DetailView
 from django.shortcuts import get_object_or_404
 from django.shortcuts import render
-from .models import Book, Library 
+from .models import Book
+from .models import Library
 
 class LibraryDetailView(DetailView):
     model = Library
