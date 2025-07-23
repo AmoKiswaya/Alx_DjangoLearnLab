@@ -7,6 +7,9 @@ from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import redirect 
 from django.contrib.auth.decorators import user_passes_test
+from django.contrib.auth.decorators import permission_required
+from django.http import HttpResponse
+from django.http import HttpResponseForbidden
 
 class LibraryDetailView(DetailView):
     model = Library
@@ -51,3 +54,45 @@ def librarian_view(request):
 @user_passes_test(is_member)
 def member_view(request):
     return render(request, 'relationship_app/member_view.html') 
+
+
+@permission_required('relationship_app.can_add_book', raise_exception=True)
+def add_book(request):
+    if request.method == 'POST':
+        title = request.POST.get('title')
+        author = request.POST.get('author')
+        # Add logic to create and save book
+        Book.objects.create(title=title, author=author)
+        return HttpResponse("Book added successfully.")
+    
+    return HttpResponse("Display add book page here.") 
+
+
+@permission_required('relationship_app.can_change_book', raise_exception=True)
+def edit_book(request, book_id):
+    try:
+        book = Book.objects.get(pk=book_id)
+    except Book.DoesNotExist:
+        return HttpResponse("Book not found.", status=404)
+
+    if request.method == 'POST':
+        book.title = request.POST.get('title')
+        book.author = request.POST.get('author')
+        book.save()
+        return HttpResponse("Book updated successfully.")
+    
+    return HttpResponse("Display edit book form here.")
+
+
+@permission_required('relationship_app.can_delete_book', raise_exception=True)
+def delete_book(request, book_id):
+    try:
+        book = Book.objects.get(pk=book_id)
+    except Book.DoesNotExist:
+        return HttpResponse("Book not found.", status=404)
+
+    if request.method == 'POST':
+        book.delete()
+        return HttpResponse("Book deleted successfully.")
+
+    return HttpResponse("Are you sure you want to delete this book?")
