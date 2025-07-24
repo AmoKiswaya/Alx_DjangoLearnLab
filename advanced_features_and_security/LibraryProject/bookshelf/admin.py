@@ -32,3 +32,5 @@ class CustomUserAdmin(UserAdmin):
     # Fields to display in list view
     list_display = ('username', 'email', 'first_name', 'last_name', 'date_of_birth', 'is_staff')
     search_fields = ('username', 'email', 'first_name', 'last_name')
+
+admin.site.register(CustomUser, CustomUserAdmin) 
