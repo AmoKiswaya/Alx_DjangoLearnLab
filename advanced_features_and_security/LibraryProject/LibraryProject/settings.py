@@ -34,6 +34,20 @@ X_FRAME_OPTIONS = 'DENY'  # or 'SAMEORIGIN'
 CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_SECURE = True
 
+# Redirect all HTTP to HTTPS
+SECURE_SSL_REDIRECT = True
+
+# Tell browsers to only use HTTPS for your site (HSTS policy)
+SECURE_HSTS_SECONDS = 31536000  # 1 year
+
+# Apply HSTS to all subdomains
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+
+# Enable HSTS preloading (used by browsers to force HTTPS without first request)
+SECURE_HSTS_PRELOAD = True
+
+
+
 
 # Application definition
 
