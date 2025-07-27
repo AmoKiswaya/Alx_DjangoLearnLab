@@ -3,6 +3,8 @@ from django.shortcuts import redirect
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import permission_required
 from .models import Book
+from .forms import ExampleForm 
+
 
 def book_list(request):
     books = Book.objects.all()
