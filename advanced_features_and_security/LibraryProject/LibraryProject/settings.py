@@ -46,6 +46,7 @@ SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 # Enable HSTS preloading (used by browsers to force HTTPS without first request)
 SECURE_HSTS_PRELOAD = True
 
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 
 
