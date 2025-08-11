@@ -1,5 +1,5 @@
 from rest_framework import generics
-from rest_framework.permissions import  IsAuthenticatedOrReadOnly, IsAuthenticated
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
 from rest_framework.exceptions import ValidationError
 from django.utils import timezone
 from .models import Book
@@ -32,7 +32,7 @@ class UpdateView(generics.UpdateAPIView):
     serializer_class = BookSerializer
     permission_classes = [IsAuthenticated]
 
-    def perform_create(self, serializer):
+    def perform_update(self, serializer):
         current_year = timezone.now().year
         if serializer.validated_data['publication_year'] > current_year:
             raise ValidationError({"publication_year": "publication year cannot be in the future"})
