@@ -11,6 +11,6 @@ urlpatterns = [
     path('books/<int:pk>/', DetailView.as_view(), name='book-detail'),
     path('books/create/', CreateView.as_view(), name='create-book'),
     path('books/update/', UpdateView.as_view(), name='update-book'),
-    path('books/<int:pk>/delete/', DeleteView.as_view(), name='delete-book'),
+    path('books/delete/', DeleteView.as_view(), name='delete-book'),
     path('api/auth/token/', obtain_auth_token, name='api_token_auth'),
 ]
