@@ -4,12 +4,19 @@ from rest_framework.exceptions import ValidationError
 from django.utils import timezone
 from .models import Book
 from .serializers import BookSerializer 
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.filters import SearchFilter, OrderingFilter
 
 
 class ListView(generics.ListAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    filterset_fields = ['title', 'author', 'publication_year'] 
+    search_fields = ['title', 'author'] 
+    ordering_fields = ['title', 'publication_year']
+    ordering = ['title']
 
 class DetailView(generics.RetrieveAPIView):
     queryset = Book.objects.all()
