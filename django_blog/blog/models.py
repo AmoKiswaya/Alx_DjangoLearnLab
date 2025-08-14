@@ -3,12 +3,16 @@ from django.contrib.auth.models import User
 from PIL import Image
 from django.dispatch import receiver
 from django.db.models.signals import post_save
+from taggit.managers import TaggableManager
+
 
 class Post(models.Model):
     title = models.CharField(max_length=200)
     content = models.TextField()
     published_date = models.DateTimeField(auto_now_add=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE) 
+    created_at = models.DateTimeField(auto_now_add=True)
+    tags = TaggableManager()
 
     def __str__(self):
         return self.title 
@@ -45,3 +49,4 @@ class Comment(models.Model):
     
     class Meta:
         ordering = ['-created_at'] 
+

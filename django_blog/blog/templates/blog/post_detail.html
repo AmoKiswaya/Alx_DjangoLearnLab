@@ -5,6 +5,15 @@
     <h1>{{ object.title }}</h1>
     <p>{{ object.content }}</p>
     <small>By {{ object.author }} on {{ object.created_at|date:"F j, Y" }}</small>
+
+    <p>
+        <strong>Tags:</strong>
+        {% for tag in object.tags.all %}
+            <a href="{% url 'posts-by-tag' tag.slug %}">{{ tag.name }}</a>{% if not forloop.last %}, {% endif %}
+        {% empty %}
+            No tags
+        {% endfor %}
+    </p>
 </article>
 
 {% if user == object.author %}
@@ -13,7 +22,6 @@
 {% endif %}
 
 <hr>
-
 
 <h2>Comments ({{ comments.count }})</h2>
 
@@ -56,4 +64,3 @@
 
 <a href="{% url 'post-list' %}">Back to list</a>
 {% endblock %}
-

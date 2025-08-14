@@ -1,11 +1,12 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from .forms import CustomUserCreationForm, UserUpdateForm, ProfileUpdateForm, CommentForm
+from .forms import CustomUserCreationForm, UserUpdateForm, ProfileUpdateForm, CommentForm, PostForm
 from django.contrib.auth.decorators import login_required
 from django.views.generic import ListView, DetailView, DeleteView, CreateView, UpdateView
 from .models import Post, Comment
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.urls import reverse_lazy, reverse
+from taggit.models import Tag
 
 def register(request):
     if request.method == 'POST':
@@ -41,6 +42,20 @@ class PostListView(ListView):
     model = Post
     template_name = 'blog/post_list.html'
     context_object_name = 'posts'
+    ordering = ['-created_at']
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        query = self.request.GET.get('q')
+
+        if query:
+            queryset = queryset.filter(
+                Q(title__icontains=query) |
+                Q(content__icontains=query) |
+                Q(tags__name__icontains=query)  
+            ).distinct()
+        return queryset
+
 
 #Show a single post
 class PostDetailView(DetailView):
@@ -70,6 +85,7 @@ class PostDetailView(DetailView):
 #Create new post
 class PostCreateView(CreateView):
     model = Post
+    form_class = PostForm
     template_name = 'blog/post_form.html'
     fields = ['title', 'content'] 
 
@@ -80,6 +96,7 @@ class PostCreateView(CreateView):
 #Edit a post
 class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Post
+    form_class = PostForm
     template_name = 'blog/post_form.html'
     fields = ['title', 'content'] 
 
@@ -141,3 +158,33 @@ class CommentDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     def test_func(self):
         comment = self.get_object()
         return self.request.user == comment.author
+
+
+class PostsByTagListView(ListView):
+    model = Post
+    template_name = 'blog/posts_by_tag.html'
+    context_object_name = 'posts'
+
+    def get_queryset(self):
+        self.tag = get_object_or_404(Tag, slug=self.kwargs['slug'])
+        return Post.objects.filter(tags__in=[self.tag])
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['tag'] = self.tag
+        return context 
+    
+class SearchResultsView(ListView):
+    model = Post
+    template_name = 'blog/search_results.html'
+    context_object_name = 'posts'
+
+    def get_queryset(self):
+        query = self.request.GET.get('q')
+        if query:
+            return Post.objects.filter(
+                Q(title__icontains=query) |
+                Q(content__icontains=query) |
+                Q(tags__name__icontains=query)
+            ).distinct()
+        return Post.objects.none() 
