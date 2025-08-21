@@ -10,7 +10,7 @@ urlpatterns = [
     path('books/', ListView.as_view(), name='list-books'),
     path('books/<int:pk>/', DetailView.as_view(), name='book-detail'),
     path('books/create/', CreateView.as_view(), name='create-book'),
-    path('books/update/', UpdateView.as_view(), name='update-book'),
-    path('books/delete/', DeleteView.as_view(), name='delete-book'),
-    path('api/auth/token/', obtain_auth_token, name='api_token_auth'),
+    path('books/update/<int:pk>/', UpdateView.as_view(), name='update-book'),
+    path('books/delete/<int:pk>/', DeleteView.as_view(), name='delete-book'),
+    path('auth/token/', obtain_auth_token, name='api_token_auth'),
 ]
