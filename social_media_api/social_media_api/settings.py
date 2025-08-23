@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'accounts',
     'posts',
+    'notifications',
     'django_filters',
 ]
 
@@ -93,7 +94,7 @@ DATABASES = {
     }
 }
 
-#REST_FRAMEWORK settings
+#REST_FRAMEWORK settings 
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
